@@ -1,0 +1,350 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>
+      Cluedo
+    </title>
+    <script src="js/jquery-1.6.4.min.js" type="text/javascript"></script>
+    <script src="js/jquery-ui-1.8.16.custom.min.js" type="text/javascript"></script>
+    <script src="js/cluedo.js" type="text/javascript"></script>
+    <link href="css/reset.css" media="screen" rel="stylesheet" type="text/css">
+    <link href="css/cluedo.css" media="screen" rel="stylesheet" type="text/css">
+  </head>
+  <body>
+    <h1>Cluedo</h1>
+    <table id="player_list">
+      <tr>
+        <td>
+          Player 1: &nbsp;
+          <input type="text" class="player_field" data-playerid="1">
+        </td>
+        <td>
+          Player 2: &nbsp;
+          <input type="text" class="player_field" data-playerid="2">
+        </td>
+        <td>
+          Player 3: &nbsp;
+          <input type="text" class="player_field" data-playerid="3">
+        </td>
+      </tr>
+      <tr>
+        <td>
+          Player 4: &nbsp;
+          <input type="text" class="player_field" data-playerid="4">
+        </td>
+        <td>
+          Player 5: &nbsp;
+          <input type="text" class="player_field" data-playerid="5">
+        </td>
+        <td>
+          Player 6: &nbsp;
+          <input type="text" class="player_field" data-playerid="6">
+        </td>
+      </tr>
+    </table>
+
+    <div id="investigations_area">
+      <div id="add_investigation_button">Add</div>
+      <h1 style="margin-bottom: 20px"> Investigations </h1>
+
+      <table id="investigation_form" style="display: none">
+        <tr>
+          <td>Investigated by:</td>
+          <td><select id="investigator_selection"></select></td>
+        </tr>
+        <tr>
+          <td>Suspect:</td>
+          <td><select id="guest_selection"></select></td>
+        </tr>
+        <tr>
+          <td>Murder Item:</td>
+          <td><select id="items_selection"></select></td>
+        </tr>
+        <tr>
+          <td>Room:</td>
+          <td><select id="rooms_selection"></select></td>
+        </tr>
+        <tr>
+          <td>Evidence gave by:</td>
+          <td><select id="player_selection"></select></td>
+        </tr>
+        <tr>
+          <td colspan=2 style="text-align: left; padding-top: 10px">
+            <div id="save_investigation_button">Save</div>
+            <div id="cancel_investigation_button">Cancel</div>
+          </td>
+        </tr>
+      </table>
+
+      <div class='investigated_row'>
+        <div class='investigate_box investigator_item_box' style='background-color: #bda926'>Investigator</div>
+        <div class='investigate_box guest_item_box' style='background-color: #404040; color: white;'>Suspect</div>
+        <div class='investigate_box items_item_box' style='background-color: #426155; color: white;'>Item</div>
+        <div class='investigate_box rooms_item_box' style='background-color: #e086a4'>Room</div>
+        <div class='investigate_box player_item_box' style='background-color: #fa0'>Evidence from</div>
+      </div>
+    </div>
+
+    <table id="cluebox">
+      <tr>
+        <td class='cluebox_header'>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_1">Player 1</label>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_2">Player 2</label>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_3">Player 3</label>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_4">Player 4</label>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_5">Player 5</label>
+        </td>
+        <td class='cluebox_header'>
+          <label class="player_6">Player 6</label>
+        </td>
+      </tr>
+      <tr>
+        <td colspan=7 class='cluebox_header2'>
+          Guests
+        </td>
+      </tr>
+      <tr>
+        <td class='cluebox_header3' id="clue_header_mustard" style="background-color: yellow;">Mustard</td>
+        <td class='cluebox_answer' id="answer_mustard_1" data-item='mustard' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_mustard_2" data-item='mustard' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_mustard_3" data-item='mustard' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_mustard_4" data-item='mustard' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_mustard_5" data-item='mustard' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_mustard_6" data-item='mustard' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_plum" style="background-color: purple; color: white;">Plum</td>
+        <td class='cluebox_answer' id="answer_plum_1" data-item='plum' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_plum_2" data-item='plum' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_plum_3" data-item='plum' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_plum_4" data-item='plum' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_plum_5" data-item='plum' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_plum_6" data-item='plum' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_green" style="background-color: green; color: white;">Green</td>
+        <td class='cluebox_answer' id="answer_green_1" data-item='green' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_green_2" data-item='green' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_green_3" data-item='green' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_green_4" data-item='green' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_green_5" data-item='green' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_green_6" data-item='green' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_peacock" style="background-color: blue; color: white;">Peacock</td>
+        <td class='cluebox_answer' id="answer_peacock_1" data-item='peacock' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_peacock_2" data-item='peacock' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_peacock_3" data-item='peacock' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_peacock_4" data-item='peacock' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_peacock_5" data-item='peacock' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_peacock_6" data-item='peacock' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_scarlet" style="background-color: #8a0000; color: white;">Scarlet</td>
+        <td class='cluebox_answer' id="answer_scarlet_1" data-item='scarlet' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_scarlet_2" data-item='scarlet' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_scarlet_3" data-item='scarlet' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_scarlet_4" data-item='scarlet' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_scarlet_5" data-item='scarlet' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_scarlet_6" data-item='scarlet' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_white" style="background-color: white;">White</td>
+        <td class='cluebox_answer' id="answer_white_1" data-item='white' data-itemtype='guest' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_white_2" data-item='white' data-itemtype='guest' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_white_3" data-item='white' data-itemtype='guest' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_white_4" data-item='white' data-itemtype='guest' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_white_5" data-item='white' data-itemtype='guest' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_white_6" data-item='white' data-itemtype='guest' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td colspan=7 class='cluebox_header2'>
+          Items
+        </td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_knife">Knife</td>
+        <td class='cluebox_answer' id="answer_knife_1" data-item='knife' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_knife_2" data-item='knife' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_knife_3" data-item='knife' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_knife_4" data-item='knife' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_knife_5" data-item='knife' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_knife_6" data-item='knife' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_candle">Candlestick</td>
+        <td class='cluebox_answer' id="answer_candle_1" data-item='candle' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_candle_2" data-item='candle' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_candle_3" data-item='candle' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_candle_4" data-item='candle' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_candle_5" data-item='candle' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_candle_6" data-item='candle' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_pistol">Pistol</td>
+        <td class='cluebox_answer' id="answer_pistol_1" data-item='pistol' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_pistol_2" data-item='pistol' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_pistol_3" data-item='pistol' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_pistol_4" data-item='pistol' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_pistol_5" data-item='pistol' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_pistol_6" data-item='pistol' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_poison">Poison</td>
+        <td class='cluebox_answer' id="answer_poison_1" data-item='poison' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_poison_2" data-item='poison' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_poison_3" data-item='poison' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_poison_4" data-item='poison' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_poison_5" data-item='poison' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_poison_6" data-item='poison' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_rope">Rope</td>
+        <td class='cluebox_answer' id="answer_rope_1" data-item='rope' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_rope_2" data-item='rope' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_rope_3" data-item='rope' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_rope_4" data-item='rope' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_rope_5" data-item='rope' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_rope_6" data-item='rope' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_dumbbell">Dumbbell</td>
+        <td class='cluebox_answer' id="answer_dumbbell_1" data-item='dumbbell' data-itemtype='items' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_dumbbell_2" data-item='dumbbell' data-itemtype='items' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_dumbbell_3" data-item='dumbbell' data-itemtype='items' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_dumbbell_4" data-item='dumbbell' data-itemtype='items' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_dumbbell_5" data-item='dumbbell' data-itemtype='items' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_dumbbell_6" data-item='dumbbell' data-itemtype='items' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td colspan=7 class='cluebox_header2'>
+          Rooms
+        </td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_hall">Hall</td>
+        <td class='cluebox_answer' id="answer_hall_1" data-item='hall' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_hall_2" data-item='hall' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_hall_3" data-item='hall' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_hall_4" data-item='hall' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_hall_5" data-item='hall' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_hall_6" data-item='hall' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_dining">Dining Room</td>
+        <td class='cluebox_answer' id="answer_dining_1" data-item='dining' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_dining_2" data-item='dining' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_dining_3" data-item='dining' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_dining_4" data-item='dining' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_dining_5" data-item='dining' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_dining_6" data-item='dining' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_kitchen">Kitchen</td>
+        <td class='cluebox_answer' id="answer_kitchen_1" data-item='kitchen' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_kitchen_2" data-item='kitchen' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_kitchen_3" data-item='kitchen' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_kitchen_4" data-item='kitchen' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_kitchen_5" data-item='kitchen' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_kitchen_6" data-item='kitchen' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_patio">Patio</td>
+        <td class='cluebox_answer' id="answer_patio_1" data-item='patio' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_patio_2" data-item='patio' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_patio_3" data-item='patio' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_patio_4" data-item='patio' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_patio_5" data-item='patio' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_patio_6" data-item='patio' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_observatory">Observatory</td>
+        <td class='cluebox_answer' id="answer_observatory_1" data-item='observatory' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_observatory_2" data-item='observatory' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_observatory_3" data-item='observatory' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_observatory_4" data-item='observatory' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_observatory_5" data-item='observatory' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_observatory_6" data-item='observatory' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_theatre">Theatre</td>
+        <td class='cluebox_answer' id="answer_theatre_1" data-item='theatre' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_theatre_2" data-item='theatre' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_theatre_3" data-item='theatre' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_theatre_4" data-item='theatre' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_theatre_5" data-item='theatre' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_theatre_6" data-item='theatre' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_living">Living Room</td>
+        <td class='cluebox_answer' id="answer_living_1" data-item='living' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_living_2" data-item='living' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_living_3" data-item='living' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_living_4" data-item='living' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_living_5" data-item='living' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_living_6" data-item='living' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_spa">Spa</td>
+        <td class='cluebox_answer' id="answer_spa_1" data-item='spa' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_spa_2" data-item='spa' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_spa_3" data-item='spa' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_spa_4" data-item='spa' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_spa_5" data-item='spa' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_spa_6" data-item='spa' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+
+      <tr>
+        <td class='cluebox_header3' id="clue_header_guest">Guest House</td>
+        <td class='cluebox_answer' id="answer_guest_1" data-item='guest' data-itemtype='rooms' data-playerid="1"></td>
+        <td class='cluebox_answer' id="answer_guest_2" data-item='guest' data-itemtype='rooms' data-playerid="2"></td>
+        <td class='cluebox_answer' id="answer_guest_3" data-item='guest' data-itemtype='rooms' data-playerid="3"></td>
+        <td class='cluebox_answer' id="answer_guest_4" data-item='guest' data-itemtype='rooms' data-playerid="4"></td>
+        <td class='cluebox_answer' id="answer_guest_5" data-item='guest' data-itemtype='rooms' data-playerid="5"></td>
+        <td class='cluebox_answer' id="answer_guest_6" data-item='guest' data-itemtype='rooms' data-playerid="6"></td>
+      </tr>
+    </table>
+
+    <table id="item_count_table">
+      <tr>
+        <td id="guest_count_info">
+        </td>
+        <td id="items_count_info">
+        </td>
+        <td id="rooms_count_info">
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
