@@ -8,8 +8,8 @@ var default_items = {
   items: {knife: 0, candle: 0, pistol: 0, poison: 0, rope: 0, dumbbell: 0},
   rooms: {hall: 0, dining: 0, kitchen: 0, living: 0, theatre: 0, observatory: 0, spa: 0, guest: 0, patio: 0}
 }
-
-var playerItemCount = {}
+var playerItemCount = [];
+var investigationsCount = {};
 
 function updatePlayerName(player){
   var player_id = player.data().playerid;
@@ -37,14 +37,17 @@ function updateViewInfos(){
 
       if(item_count >= 3 && item_count <= 5){
         style = "color: #8a6800";
+        jQuery(".global_item_" + item).css({"text-decoration": "none"});
       }
       else if(item_count == 6){
         style = "color: red";
+        jQuery(".global_item_" + item).css({"text-decoration": "line-through"});
       }
 
       if(item_count > 6){
         style = "color: green";
         pretty_item_count = "★";
+        jQuery(".global_item_" + item).css({"text-decoration": "line-through"});
       }
       else {
         pretty_item_count = item_count;
@@ -148,6 +151,41 @@ function initUpdateOptions(){
   jQuery("#rooms_selection").html(rooms_options);
 }
 
+function updatePlayerEvidenceView(){
+  var playersList = [];
+
+  jQuery.each(cluedoPlayers, function(index, player){
+    playersList[index] = {
+      guest: {mustard: 0, plum: 0, green: 0, peacock: 0, scarlet: 0, white: 0},
+      items: {knife: 0, candle: 0, pistol: 0, poison: 0, rope: 0, dumbbell: 0},
+      rooms: {hall: 0, dining: 0, kitchen: 0, living: 0, theatre: 0, observatory: 0, spa: 0, guest: 0, patio: 0}
+    }
+  });
+
+  for(code in investigationsCount){
+    hash = investigationsCount[code];
+
+    if(hash != undefined){
+      playersList[hash['player']]['guest'][hash['guest']]++;
+      playersList[hash['player']]['items'][hash['item']]++;
+      playersList[hash['player']]['rooms'][hash['room']]++;
+    }
+  }
+
+  jQuery.each(playersList, function(index, player_hash){
+    html = ""
+    for(clue_type in player_hash){
+      for(item in player_hash[clue_type]){
+        if(player_hash[clue_type][item] > 0){
+          html += "<span class='global_item_" + item + "'>"
+          html += item.capitalize() + " - " + player_hash[clue_type][item] + "<br></span>"
+        }
+      }
+    }
+    jQuery("#player_evidence_" + index).html(html);
+  });
+}
+
 function initInvestigationForm(){
   jQuery("#add_investigation_button").bind("click", function(){
     jQuery("#investigation_form").effect("blind", {mode: 'show'}, 500);
@@ -159,29 +197,47 @@ function initInvestigationForm(){
 
   jQuery("#save_investigation_button").bind("click", function(){
     var investigator = jQuery("#investigator_selection").val();
-    var guest = jQuery("#guest_selection").val().capitalize();
-    var item  = jQuery("#items_selection").val().capitalize();
-    var room  = jQuery("#rooms_selection").val().capitalize();
+    var guest = jQuery("#guest_selection").val();
+    var item  = jQuery("#items_selection").val();
+    var room  = jQuery("#rooms_selection").val();
     var player = jQuery("#player_selection").val();
     var html = "";
 
+    code = (new Date).getTime();
+    investigationsCount[code] = {investigator: investigator, player: player, guest: guest, item: item, room: room};
+
+    updatePlayerEvidenceView();
+
     html += "<div class='investigated_row'>"
     html += "<div class='investigate_box investigator_item_box' style='background-color: #bda926'>" + (cluedoPlayers[investigator] || "none") + "</div>";
-    html += "<div class='investigate_box guest_item_box' style='background-color: #404040; color: white;'>" + guest + "</div>";
-    html += "<div class='investigate_box items_item_box' style='background-color: #426155; color: white;'>" + item + "</div>";
-    html += "<div class='investigate_box rooms_item_box' style='background-color: #e086a4'>" + room + "</div>";
+    html += "<div class='investigate_box guest_item_box' style='background-color: #404040; color: white;'>" + guest.capitalize() + "</div>";
+    html += "<div class='investigate_box items_item_box' style='background-color: #426155; color: white;'>" + item.capitalize() + "</div>";
+    html += "<div class='investigate_box rooms_item_box' style='background-color: #e086a4'>" + room.capitalize() + "</div>";
     html += "<div class='investigate_box player_item_box' style='background-color: #fa0'>" + (cluedoPlayers[player] || "none") + "</div>";
-    html += "<div class='investigate_box remove_row_box' title='Remove this investigation' style='cursor: pointer'><img src='trash.png'></div>"
+    html += "<div class='investigate_box remove_row_box' data-investigationid='" + code + "' title='Remove this investigation' style='cursor: pointer'><img src='trash.png'></div>"
     html += "</div>";
 
-    jQuery("#investigations_area").append(jQuery(html));
+    jQuery("#investigations_list").append(jQuery(html));
     jQuery("#investigation_form").effect("blind", 500);
   });
 
   jQuery(".remove_row_box").live("click", function(){
     if(confirm("Are you sure? There's no turning back.")){
+      investigationsCount[jQuery(this).data().investigationid] = undefined;
       jQuery(this).parent().effect("puff");
+      updatePlayerEvidenceView();
     }
+  });
+}
+
+function initPlayerData(){
+  jQuery.each(cluedoPlayers, function(index, player){
+    playerItemCount[index] = {
+      guest: {mustard: 0, plum: 0, green: 0, peacock: 0, scarlet: 0, white: 0},
+      items: {knife: 0, candle: 0, pistol: 0, poison: 0, rope: 0, dumbbell: 0},
+      rooms: {hall: 0, dining: 0, kitchen: 0, living: 0, theatre: 0, observatory: 0, spa: 0, guest: 0, patio: 0}
+    }
+;
   });
 }
 
